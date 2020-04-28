@@ -27,3 +27,9 @@ spring:
 mybatis:
  type-aliases-package: com.ysdrzp.pojo     # 所有POJO类所在包路径
  mapper-locations: classpath:mapper/*.xml  # mapper映射文件
+
+# mybatis mapper 配置
+mapper:
+  mappers: com.ysdrzp.my.mapper.MyMapper
+  not-empty: false
+  identity: MYSQL
