@@ -11,6 +11,7 @@
     <modules>
         <module>foodie-dev-common</module>
         <module>foodie-dev-pojo</module>
+        <module>foodie-dev-mapper</module>
     </modules>
 
 
