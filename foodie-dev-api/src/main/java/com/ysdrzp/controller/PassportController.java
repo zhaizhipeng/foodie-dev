@@ -3,6 +3,8 @@ package com.ysdrzp.controller;
 import com.ysdrzp.bo.UserBo;
 import com.ysdrzp.pojo.Users;
 import com.ysdrzp.service.IUserService;
+import com.ysdrzp.utils.CookieUtils;
+import com.ysdrzp.utils.JsonUtils;
 import com.ysdrzp.utils.YSDRZPJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +12,9 @@ import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户注册登录模块
@@ -50,7 +55,7 @@ public class PassportController {
      */
     @ApiOperation(value = "用户注册", notes = "created by @ysdrzp", httpMethod = "POST")
     @PostMapping("/regist")
-    public YSDRZPJSONResult regist(@RequestBody UserBo userBo){
+    public YSDRZPJSONResult regist(@RequestBody UserBo userBo, HttpServletRequest request, HttpServletResponse response){
 
         if (StringUtils.isBlank(userBo.getUsername()) || StringUtils.isBlank(userBo.getPassword())
                 || StringUtils.isBlank(userBo.getConfirmPassword())){
@@ -73,9 +78,41 @@ public class PassportController {
         Users users;
         try{
             users = userService.createUser(userBo);
+
+            CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(users), true);
         }catch (Exception e){
             e.printStackTrace();
             return YSDRZPJSONResult.errorException("用户注册异常");
+        }
+
+        return YSDRZPJSONResult.ok(users);
+    }
+
+    /**
+     * 用户登录
+     * @param userBo
+     * @return
+     */
+    @ApiOperation(value = "用户登录", notes = "created by @ysdrzp", httpMethod = "POST")
+    @PostMapping("/login")
+    public YSDRZPJSONResult login(@RequestBody UserBo userBo, HttpServletRequest request, HttpServletResponse response){
+
+        if (StringUtils.isBlank(userBo.getUsername()) || StringUtils.isBlank(userBo.getPassword())){
+            return YSDRZPJSONResult.errorMsg("用户名或密码不能为空");
+        }
+
+        Users users;
+        try{
+            users = userService.queryUserForLogin(userBo.getUsername(), userBo.getPassword());
+            if (users == null){
+                return YSDRZPJSONResult.errorMsg("用户名或密码不正确");
+            }
+
+            CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(users), true);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return YSDRZPJSONResult.errorException("用户登录异常");
         }
 
         return YSDRZPJSONResult.ok(users);

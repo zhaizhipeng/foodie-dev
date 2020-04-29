@@ -21,4 +21,12 @@ public interface IUserService {
      * @return
      */
     Users createUser(UserBo userBo) throws Exception;
+
+    /**
+     * 查询用户信息用于登录
+     * @param username
+     * @param password
+     * @return
+     */
+    Users queryUserForLogin(String username, String password) throws Exception;
 }

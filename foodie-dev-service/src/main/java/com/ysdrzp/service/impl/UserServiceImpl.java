@@ -5,10 +5,13 @@ import com.ysdrzp.enums.Sex;
 import com.ysdrzp.mapper.UsersMapper;
 import com.ysdrzp.pojo.Users;
 import com.ysdrzp.service.IUserService;
+import com.ysdrzp.utils.CookieUtils;
 import com.ysdrzp.utils.DateUtil;
 import com.ysdrzp.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 /**
@@ -53,6 +56,32 @@ public class UserServiceImpl implements IUserService {
         users.setCreatedTime(DateUtil.getCurrentTimestamp());
         users.setUpdatedTime(DateUtil.getCurrentTimestamp());
         usersMapper.insertSelective(users);
+
+        users = setPropertyNull(users);
+        return users;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Users queryUserForLogin(String username, String password) throws Exception {
+
+        Example example = new Example(Users.class);
+        Example.Criteria usersCriteria = example.createCriteria();
+        usersCriteria.andEqualTo("username", username);
+        usersCriteria.andEqualTo("password", MD5Utils.getMD5Str(password));
+
+        Users resultUsers = usersMapper.selectOneByExample(example);
+        resultUsers = setPropertyNull(resultUsers);
+
+        return resultUsers;
+    }
+
+    private Users setPropertyNull(Users users){
+        users.setPassword(null);
+        users.setMobile(null);
+        users.setCreatedTime(null);
+        users.setUpdatedTime(null);
+        users.setBirthday(null);
         return users;
     }
 
