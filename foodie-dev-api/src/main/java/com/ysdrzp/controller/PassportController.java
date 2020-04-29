@@ -117,4 +117,19 @@ public class PassportController {
 
         return YSDRZPJSONResult.ok(users);
     }
+
+    /**
+     * 用户登录退出
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "用户登录退出", notes = "created by @ysdrzp", httpMethod = "POST")
+    @PostMapping("/logout")
+    public YSDRZPJSONResult logout(@RequestParam String userId, HttpServletRequest request, HttpServletResponse response){
+
+        CookieUtils.deleteCookie(request, response, "user");
+
+        return YSDRZPJSONResult.ok();
+    }
+
 }
