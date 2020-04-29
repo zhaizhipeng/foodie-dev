@@ -41,8 +41,8 @@ public class Swagger {
     }
 
     private ApiInfo apiInfo(){
-        return new ApiInfoBuilder().title("网上商城")
-                .description("这是网上商城项目相关的接口文档 API")
+        return new ApiInfoBuilder().title("吃喝玩乐网上商城")
+                .description("这是吃喝玩乐网上商城项目相关的接口文档 API")
                 .contact(new Contact("ysdrzp","http://localhost:8088/doc.html", ""))
                 .version(VERSION)
                 .build();

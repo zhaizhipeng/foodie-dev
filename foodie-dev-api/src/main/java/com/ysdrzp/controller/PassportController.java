@@ -6,6 +6,7 @@ import com.ysdrzp.service.IUserService;
 import com.ysdrzp.utils.YSDRZPJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 用户注册登录模块
  */
-@Api(value = "用户注册登录", tags = {"用户注册登录相关接口"})
+@Api(value = "用户注册登录", tags = {"用户注册登录相关接口"}, hidden = true)
 @RestController
 @RequestMapping("passport")
 public class PassportController {
@@ -28,7 +29,7 @@ public class PassportController {
      */
     @ApiOperation(value = "校验用户名是否存在", notes = "created by @ysdrzp", httpMethod = "GET")
     @GetMapping("/usernameIsExist")
-    public YSDRZPJSONResult usernameIsExist(@RequestParam String username){
+    public YSDRZPJSONResult usernameIsExist(@RequestParam @ApiParam(name = "username", value = "用户名", defaultValue = "ysdrzp") String username){
 
         if (StringUtils.isBlank(username)){
             return YSDRZPJSONResult.errorMsg("用户名不能为空");
