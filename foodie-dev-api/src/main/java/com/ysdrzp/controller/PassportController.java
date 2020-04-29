@@ -4,6 +4,8 @@ import com.ysdrzp.bo.UserBo;
 import com.ysdrzp.pojo.Users;
 import com.ysdrzp.service.IUserService;
 import com.ysdrzp.utils.YSDRZPJSONResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 用户注册登录模块
  */
+@Api(value = "用户注册登录", tags = {"用户注册登录相关接口"})
 @RestController
 @RequestMapping("passport")
 public class PassportController {
@@ -23,6 +26,7 @@ public class PassportController {
      * @param username
      * @return
      */
+    @ApiOperation(value = "校验用户名是否存在", notes = "created by @ysdrzp", httpMethod = "GET")
     @GetMapping("/usernameIsExist")
     public YSDRZPJSONResult usernameIsExist(@RequestParam String username){
 
@@ -43,6 +47,7 @@ public class PassportController {
      * @param userBo
      * @return
      */
+    @ApiOperation(value = "用户注册", notes = "created by @ysdrzp", httpMethod = "POST")
     @PostMapping("/register")
     public YSDRZPJSONResult register(@RequestBody UserBo userBo){
 
