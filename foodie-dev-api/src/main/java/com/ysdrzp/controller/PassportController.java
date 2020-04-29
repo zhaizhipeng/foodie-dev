@@ -49,15 +49,15 @@ public class PassportController {
      * @return
      */
     @ApiOperation(value = "用户注册", notes = "created by @ysdrzp", httpMethod = "POST")
-    @PostMapping("/register")
-    public YSDRZPJSONResult register(@RequestBody UserBo userBo){
+    @PostMapping("/regist")
+    public YSDRZPJSONResult regist(@RequestBody UserBo userBo){
 
         if (StringUtils.isBlank(userBo.getUsername()) || StringUtils.isBlank(userBo.getPassword())
-                || StringUtils.isBlank(userBo.getCheckPassword())){
+                || StringUtils.isBlank(userBo.getConfirmPassword())){
             return YSDRZPJSONResult.errorMsg("用户名或密码不能为空");
         }
 
-        if (! userBo.getPassword().equals(userBo.getCheckPassword())){
+        if (! userBo.getPassword().equals(userBo.getConfirmPassword())){
             return YSDRZPJSONResult.errorMsg("两次密码输入不一致");
         }
 
