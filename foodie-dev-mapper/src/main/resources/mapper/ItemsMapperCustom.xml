@@ -51,4 +51,35 @@
             </if>
       </select>
 
+    <select id="searchItemByThirdCat" parameterType="Map" resultType="com.ysdrzp.vo.ItemSearchVO">
+        SELECT
+            items.id AS itemId,
+            items.item_name AS itemName,
+            items.sell_counts AS sellCounts,
+            items_img.url AS imgUrl,
+            temp.price_discount AS price
+        FROM items
+        LEFT JOIN items_img ON (items.id = items_img.item_id AND items_img.is_main = 1)
+        LEFT JOIN (
+        SELECT item_id,MIN(price_discount) AS price_discount FROM items_spec GROUP BY item_id
+        ) temp ON (items.id = temp.item_id)
+        WHERE
+            items.cat_id = #{paramMap.catId}
+        <if test="paramMap.sort != null and paramMap.sort != ''">
+            <choose>
+                <!-- 销量排序 -->
+                <when test="paramMap.sort == &quot;c&quot;">
+                    order by items.sell_counts desc
+                </when>
+                <!-- 价格排序 -->
+                <when test="paramMap.sort == &quot;'s'&quot;">
+                    order by temp.price_discount asc
+                </when>
+                <otherwise>
+                    order by items.item_name
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
 </mapper>

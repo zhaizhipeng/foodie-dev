@@ -108,4 +108,26 @@ public class ItemsController {
         return YSDRZPJSONResult.ok(pagedGridResult);
     }
 
+    @ApiOperation(value = "根据三级分类Id搜索商品", notes = "created by @ysdrzp", httpMethod = "GET")
+    @GetMapping("/catItems")
+    public YSDRZPJSONResult catItems(@ApiParam(value = "三级分类Id", name = "catId", required = true) @RequestParam String catId,
+                                   @ApiParam(value = "排序", name = "sort") @RequestParam String sort,
+                                   @ApiParam(value = "第几页", name = "page") @RequestParam Integer page,
+                                   @ApiParam(value = "每页显示的记录数", name = "pageSize") @RequestParam Integer pageSize){
+
+        if (StringUtils.isBlank(catId)){
+            return YSDRZPJSONResult.errorMsg(null);
+        }
+
+        if (page == null){
+            page = 1;
+        }
+
+        if (pageSize == null){
+            pageSize = 20;
+        }
+
+        PagedGridResult pagedGridResult = itemsService.pagedQueryItemByThirdCat(catId, sort, page, pageSize);
+        return YSDRZPJSONResult.ok(pagedGridResult);
+    }
 }

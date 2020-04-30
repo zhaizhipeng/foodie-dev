@@ -119,6 +119,17 @@ public class ItemsServiceImpl implements ItemsService {
         return setterPagedGridResult(list, page);
     }
 
+    @Override
+    public PagedGridResult pagedQueryItemByThirdCat(String catId, String sort, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("catId", catId);
+        paramMap.put("sort", sort);
+        List<ItemSearchVO> list = itemsMapperCustom.searchItemByThirdCat(paramMap);
+        return setterPagedGridResult(list, page);
+    }
+
     /**
      * 封装分页结果
      * @param list
