@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ysdrzp.mapper.ItemsMapperCustom" >
+
+  <select id="queryItemComment" parameterType="Map" resultType="com.ysdrzp.vo.ItemCommentVO">
+
+      SELECT
+        items_comments.comment_level AS commentLevel,
+        items_comments.content AS commentContent,
+        items_comments.created_time AS createdTime,
+        items_comments.sepc_name as specName,
+        users.nickname AS nickname,
+        users.face AS userFace
+      FROM items_comments
+      LEFT JOIN users ON (items_comments.user_id = users.id)
+      where items_comments.item_id = #{paramMap.itemId}
+      <if test="paramMap.level != null">
+        and items_comments.comment_level = #{paramMap.level}
+      </if>
+
+  </select>
+
+</mapper>

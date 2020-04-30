@@ -2,6 +2,8 @@ package com.ysdrzp.controller;
 
 import com.ysdrzp.pojo.*;
 import com.ysdrzp.service.*;
+import com.ysdrzp.utils.JsonUtils;
+import com.ysdrzp.utils.PagedGridResult;
 import com.ysdrzp.utils.YSDRZPJSONResult;
 import com.ysdrzp.vo.CommentsCountVO;
 import com.ysdrzp.vo.ItemsVO;
@@ -57,6 +59,30 @@ public class ItemsController {
 
         CommentsCountVO commentsCountVO = itemsService.queryCommentCount(itemId);
         return YSDRZPJSONResult.ok(commentsCountVO);
+    }
+
+    @ApiOperation(value = "分页获取商品评价列表", notes = "created by @ysdrzp", httpMethod = "GET")
+    @GetMapping("/comments")
+    public YSDRZPJSONResult comments(@ApiParam(value = "商品Id", name = "itemId", required = true) @RequestParam String itemId,
+                                     @ApiParam(value = "评价等级", name = "level") @RequestParam Integer level,
+                                     @ApiParam(value = "第几页", name = "page") @RequestParam Integer page,
+                                     @ApiParam(value = "每页显示的记录数", name = "pageSize") @RequestParam Integer pageSize){
+
+        if (StringUtils.isBlank(itemId)){
+            return YSDRZPJSONResult.errorMsg(null);
+        }
+
+        if (page == null){
+            page = 1;
+        }
+
+        if (pageSize == null){
+            pageSize = 20;
+        }
+
+        PagedGridResult pagedGridResult = itemsService.queryItemComment(itemId, level, page, pageSize);
+        System.out.println(JsonUtils.objectToJson(pagedGridResult));
+        return YSDRZPJSONResult.ok(pagedGridResult);
     }
 
 }

@@ -4,8 +4,8 @@ import com.ysdrzp.pojo.Items;
 import com.ysdrzp.pojo.ItemsImg;
 import com.ysdrzp.pojo.ItemsParam;
 import com.ysdrzp.pojo.ItemsSpec;
+import com.ysdrzp.utils.PagedGridResult;
 import com.ysdrzp.vo.CommentsCountVO;
-
 import java.util.List;
 
 public interface ItemsService {
@@ -44,5 +44,15 @@ public interface ItemsService {
      * @return
      */
     CommentsCountVO queryCommentCount(String itemId);
+
+    /**
+     * 分页查询商品评论列表
+     * @param itemId
+     * @param level
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PagedGridResult queryItemComment(String itemId, Integer level, Integer page, Integer pageSize);
 
 }
