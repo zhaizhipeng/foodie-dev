@@ -41,8 +41,8 @@ public class Swagger {
     }
 
     private ApiInfo apiInfo(){
-        return new ApiInfoBuilder().title("天天吃货")
-                .description("这是天天吃货相关的接口文档 API")
+        return new ApiInfoBuilder().title("天天吃货在线购物平台")
+                .description("这是相关的接口文档 API")
                 .contact(new Contact("ysdrzp","http://localhost:8088/doc.html", ""))
                 .version(VERSION)
                 .build();
