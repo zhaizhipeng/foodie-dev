@@ -24,7 +24,6 @@ public class ItemsController {
     @Autowired
     ItemsService itemsService;
 
-
     @ApiOperation(value = "获取商品详情信息", notes = "created by @ysdrzp", httpMethod = "GET")
     @GetMapping("/info/{itemId}")
     public YSDRZPJSONResult info(@ApiParam(value = "商品Id", name = "itemId", required = true) @PathVariable String itemId){
