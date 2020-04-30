@@ -6,6 +6,7 @@ import com.ysdrzp.service.ICarouselService;
 import com.ysdrzp.service.ICategoryService;
 import com.ysdrzp.utils.YSDRZPJSONResult;
 import com.ysdrzp.vo.CategoryVO;
+import com.ysdrzp.vo.SixItemVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +43,19 @@ public class IndexController {
         return YSDRZPJSONResult.ok(list);
     }
 
-    @ApiOperation(value = "获取首页商品分类-子类-懒加载", notes = "created by @ysdrzp", httpMethod = "GET")
+    @ApiOperation(value = "获取首页商品分类-子类别", notes = "created by @ysdrzp", httpMethod = "GET")
     @GetMapping("/subCat/{rootCatId}")
     public YSDRZPJSONResult subCat(@PathVariable Integer rootCatId){
 
         List<CategoryVO> list = categoryService.getSubCatList(rootCatId);
+        return YSDRZPJSONResult.ok(list);
+    }
+
+    @ApiOperation(value = "获取首页推荐商品", notes = "created by @ysdrzp", httpMethod = "GET")
+    @GetMapping("/sixNewItems/{rootCatId}")
+    public YSDRZPJSONResult sixNewItems(@PathVariable Integer rootCatId){
+
+        List<SixItemVO> list = categoryService.getSixNewItemsLazy(rootCatId);
         return YSDRZPJSONResult.ok(list);
     }
 

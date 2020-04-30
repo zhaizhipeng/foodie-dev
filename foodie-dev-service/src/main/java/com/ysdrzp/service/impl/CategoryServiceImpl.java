@@ -5,6 +5,7 @@ import com.ysdrzp.mapper.CategoryMapperCustom;
 import com.ysdrzp.pojo.Category;
 import com.ysdrzp.service.ICategoryService;
 import com.ysdrzp.vo.CategoryVO;
+import com.ysdrzp.vo.SixItemVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -39,6 +40,11 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public List<CategoryVO> getSubCatList(Integer rootCatId) {
         return categoryMapperCustom.getSubCatList(rootCatId);
+    }
+
+    @Override
+    public List<SixItemVO> getSixNewItemsLazy(Integer rootCatId) {
+        return categoryMapperCustom.getSixNewItemsLazy(rootCatId);
     }
 
 }

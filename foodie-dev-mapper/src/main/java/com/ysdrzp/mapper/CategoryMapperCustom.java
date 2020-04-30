@@ -1,6 +1,7 @@
 package com.ysdrzp.mapper;
 
 import com.ysdrzp.vo.CategoryVO;
+import com.ysdrzp.vo.SixItemVO;
 
 import java.util.List;
 
@@ -15,5 +16,12 @@ public interface CategoryMapperCustom {
      * @return
      */
     List<CategoryVO> getSubCatList(Integer rootCatId);
+
+    /**
+     * 获取首页商品推荐信息
+     * @param rootCatId
+     * @return
+     */
+    List<SixItemVO> getSixNewItemsLazy(Integer rootCatId);
 
 }

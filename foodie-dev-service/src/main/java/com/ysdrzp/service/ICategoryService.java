@@ -2,6 +2,8 @@ package com.ysdrzp.service;
 
 import com.ysdrzp.pojo.Category;
 import com.ysdrzp.vo.CategoryVO;
+import com.ysdrzp.vo.SixItemVO;
+
 import java.util.List;
 
 /**
@@ -22,4 +24,10 @@ public interface ICategoryService {
      */
     List<CategoryVO> getSubCatList(Integer rootCatId);
 
+    /**
+     * 获取首页商品推荐信息
+     * @param rootCatId
+     * @return
+     */
+    List<SixItemVO> getSixNewItemsLazy(Integer rootCatId);
 }

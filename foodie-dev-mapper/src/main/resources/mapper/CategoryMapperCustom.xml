@@ -15,6 +15,16 @@
         </collection>
     </resultMap>
 
+    <resultMap id="sixItemResultMap" type="com.ysdrzp.vo.SixItemVO">
+        <result column="rootCatName" property="rootCatName"></result>
+        <result column="slogan" property="slogan"></result>
+        <collection property="subSixItemVOList" ofType="com.ysdrzp.vo.SubSixItemVO">
+            <result column="itemId" property="itemId"></result>
+            <result column="itemName" property="itemName"></result>
+            <result column="itemUrl" property="itemUrl"></result>
+        </collection>
+    </resultMap>
+
     <select id="getSubCatList" resultMap="subCatResultMap">
         SELECT
             f.id AS id,
@@ -25,11 +35,23 @@
             c.`name` AS subName,
             c.type AS subType,
             c.father_id AS subFatherId
-        FROM
-            category f
+        FROM category f
         LEFT JOIN category c ON (f.id = c.father_id)
-        WHERE
-            f.father_id = #{rootCatId}
+        WHERE f.father_id = #{rootCatId}
+    </select>
+
+    <select id="getSixNewItemsLazy" resultMap="sixItemResultMap">
+        SELECT
+            category.name AS rootCatName,
+            category.slogan AS slogan,
+            items.id AS itemId,
+            items.item_name AS itemName,
+            items_img.url AS itemUrl
+        FROM
+            items_img
+        LEFT JOIN items ON (items_img.item_id = items.id AND items_img.is_main = 1 )
+        LEFT JOIN category ON (items.root_cat_id = category.id)
+        WHERE category.id = #{rootCatId}
     </select>
 
 </mapper>
