@@ -20,5 +20,5 @@ public class SixItemVO {
     /**
      * 商品推荐列表
      */
-    private List<SubSixItemVO> subSixItemVOList;
+    private List<SimpleItemVO> simpleItemList;
 }

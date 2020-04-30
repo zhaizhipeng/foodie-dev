@@ -3,7 +3,7 @@ package com.ysdrzp.vo;
 import lombok.Data;
 
 @Data
-public class SubSixItemVO {
+public class SimpleItemVO {
 
     /**
      * 商品 Id
@@ -19,5 +19,4 @@ public class SubSixItemVO {
      * 商品图片地址
      */
     private String itemUrl;
-
 }
