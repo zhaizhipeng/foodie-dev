@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 用户注册登录模块
  */
-@Api(value = "用户注册登录", tags = {"用户注册登录相关接口"}, hidden = true)
+@Api(value = "用户注册登录", tags = {"注册登录"}, hidden = true)
 @RestController
 @RequestMapping("passport")
 public class PassportController {

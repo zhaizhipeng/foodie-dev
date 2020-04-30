@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
-@Api(value = "首页", tags = {"首页相关接口"}, hidden = true)
+@Api(value = "首页", tags = {"首页"}, hidden = true)
 @RestController
 @RequestMapping("index")
 public class IndexController {
