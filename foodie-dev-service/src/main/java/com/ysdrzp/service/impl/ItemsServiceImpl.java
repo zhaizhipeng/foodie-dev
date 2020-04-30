@@ -10,6 +10,7 @@ import com.ysdrzp.utils.DesensitizationUtil;
 import com.ysdrzp.utils.PagedGridResult;
 import com.ysdrzp.vo.CommentsCountVO;
 import com.ysdrzp.vo.ItemCommentVO;
+import com.ysdrzp.vo.ItemSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -104,6 +105,17 @@ public class ItemsServiceImpl implements ItemsService {
             // 昵称脱敏
             itemCommentVO.setNickname(DesensitizationUtil.commonDisplay(itemCommentVO.getNickname()));
         }
+        return setterPagedGridResult(list, page);
+    }
+
+    @Override
+    public PagedGridResult pagedQueryItemByKeyWord(String keywords, String sort, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("keywords", keywords);
+        paramMap.put("sort", sort);
+        List<ItemSearchVO> list = itemsMapperCustom.searchItemByKeyWord(paramMap);
         return setterPagedGridResult(list, page);
     }
 

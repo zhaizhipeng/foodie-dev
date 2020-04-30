@@ -85,4 +85,27 @@ public class ItemsController {
         return YSDRZPJSONResult.ok(pagedGridResult);
     }
 
+    @ApiOperation(value = "根据关键词搜索商品", notes = "created by @ysdrzp", httpMethod = "GET")
+    @GetMapping("/search")
+    public YSDRZPJSONResult search(@ApiParam(value = "搜索关键词", name = "keywords", required = true) @RequestParam String keywords,
+                                     @ApiParam(value = "排序", name = "sort") @RequestParam String sort,
+                                     @ApiParam(value = "第几页", name = "page") @RequestParam Integer page,
+                                     @ApiParam(value = "每页显示的记录数", name = "pageSize") @RequestParam Integer pageSize){
+
+        if (StringUtils.isBlank(keywords)){
+            return YSDRZPJSONResult.errorMsg(null);
+        }
+
+        if (page == null){
+            page = 1;
+        }
+
+        if (pageSize == null){
+            pageSize = 20;
+        }
+
+        PagedGridResult pagedGridResult = itemsService.pagedQueryItemByKeyWord(keywords, sort, page, pageSize);
+        return YSDRZPJSONResult.ok(pagedGridResult);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.ysdrzp.mapper;
 
 import com.ysdrzp.vo.ItemCommentVO;
+import com.ysdrzp.vo.ItemSearchVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,4 +18,11 @@ public interface ItemsMapperCustom{
      * @return
      */
     List<ItemCommentVO> queryItemComment(@Param("paramMap") Map<String, Object> paramMap);
+
+    /**
+     * 关键词查询商品
+     * @param paramMap
+     * @return
+     */
+    List<ItemSearchVO> searchItemByKeyWord(@Param("paramMap") Map<String, Object> paramMap);
 }

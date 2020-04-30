@@ -2,22 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ysdrzp.mapper.ItemsMapperCustom" >
 
-  <select id="queryItemComment" parameterType="Map" resultType="com.ysdrzp.vo.ItemCommentVO">
+      <select id="queryItemComment" parameterType="Map" resultType="com.ysdrzp.vo.ItemCommentVO">
 
-      SELECT
-        items_comments.comment_level AS commentLevel,
-        items_comments.content AS commentContent,
-        items_comments.created_time AS createdTime,
-        items_comments.sepc_name as specName,
-        users.nickname AS nickname,
-        users.face AS userFace
-      FROM items_comments
-      LEFT JOIN users ON (items_comments.user_id = users.id)
-      where items_comments.item_id = #{paramMap.itemId}
-      <if test="paramMap.level != null">
-        and items_comments.comment_level = #{paramMap.level}
-      </if>
+          SELECT
+            items_comments.comment_level AS commentLevel,
+            items_comments.content AS commentContent,
+            items_comments.created_time AS createdTime,
+            items_comments.sepc_name as specName,
+            users.nickname AS nickname,
+            users.face AS userFace
+          FROM items_comments
+          LEFT JOIN users ON (items_comments.user_id = users.id)
+          where items_comments.item_id = #{paramMap.itemId}
+          <if test="paramMap.level != null">
+            and items_comments.comment_level = #{paramMap.level}
+          </if>
 
-  </select>
+      </select>
+
+      <select id="searchItemByKeyWord" parameterType="Map" resultType="com.ysdrzp.vo.ItemSearchVO">
+            SELECT
+                items.id AS itemId,
+                items.item_name AS itemName,
+                items.sell_counts AS sellCounts,
+                items_img.url AS imgUrl,
+                temp.price_discount AS price
+            FROM items
+            LEFT JOIN items_img ON (items.id = items_img.item_id AND items_img.is_main = 1)
+            LEFT JOIN (
+                        SELECT item_id,MIN(price_discount) AS price_discount FROM items_spec GROUP BY item_id
+                ) temp ON (items.id = temp.item_id)
+            WHERE
+                items.item_name like concat('%', #{paramMap.keywords}, '%')
+            <if test="paramMap.sort != null and paramMap.sort != ''">
+                <choose>
+                    <!-- 销量排序 -->
+                    <when test="paramMap.sort == &quot;c&quot;">
+                        order by items.sell_counts desc
+                    </when>
+                    <!-- 价格排序 -->
+                    <when test="paramMap.sort == &quot;'s'&quot;">
+                        order by temp.price_discount asc
+                    </when>
+                    <otherwise>
+                        order by items.item_name
+                    </otherwise>
+                </choose>
+            </if>
+      </select>
 
 </mapper>
