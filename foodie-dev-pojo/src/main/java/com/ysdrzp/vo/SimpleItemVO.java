@@ -19,4 +19,9 @@ public class SimpleItemVO {
      * 商品图片地址
      */
     private String itemUrl;
+
+    /**
+     * 创建时间
+     */
+    private String createdtime;
 }

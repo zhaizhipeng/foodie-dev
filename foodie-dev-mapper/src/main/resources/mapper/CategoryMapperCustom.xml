@@ -15,16 +15,6 @@
         </collection>
     </resultMap>
 
-    <resultMap id="sixItemResultMap" type="com.ysdrzp.vo.SixItemVO">
-        <result column="rootCatName" property="rootCatName"></result>
-        <result column="slogan" property="slogan"></result>
-        <collection property="simpleItemList" ofType="com.ysdrzp.vo.SimpleItemVO">
-            <result column="itemId" property="itemId"></result>
-            <result column="itemName" property="itemName"></result>
-            <result column="itemUrl" property="itemUrl"></result>
-        </collection>
-    </resultMap>
-
     <select id="getSubCatList" resultMap="subCatResultMap">
         SELECT
             f.id AS id,
@@ -40,18 +30,37 @@
         WHERE f.father_id = #{rootCatId}
     </select>
 
+    <resultMap id="sixItemResultMap" type="com.ysdrzp.vo.SixItemVO">
+        <result column="rootCatId" property="rootCatId"></result>
+        <result column="rootCatName" property="rootCatName"></result>
+        <result column="catImage" property="catImage"></result>
+        <result column="bgColor" property="bgColor"></result>
+        <result column="slogan" property="slogan"></result>
+        <collection property="simpleItemList" ofType="com.ysdrzp.vo.SimpleItemVO">
+            <result column="itemId" property="itemId"></result>
+            <result column="itemName" property="itemName"></result>
+            <result column="itemUrl" property="itemUrl"></result>
+            <result column="createdtime" property="createdtime"></result>
+        </collection>
+    </resultMap>
+
     <select id="getSixNewItemsLazy" resultMap="sixItemResultMap">
         SELECT
+            category.id AS rootCatId,
             category.name AS rootCatName,
+            category.cat_image AS catImage,
+            category.bg_color AS bgColor,
             category.slogan AS slogan,
             items.id AS itemId,
             items.item_name AS itemName,
-            items_img.url AS itemUrl
-        FROM
-            items_img
-        LEFT JOIN items ON (items_img.item_id = items.id AND items_img.is_main = 1 )
-        LEFT JOIN category ON (items.root_cat_id = category.id)
-        WHERE category.id = #{rootCatId}
+            items_img.url AS itemUrl,
+            items.created_time AS createdtime
+        FROM category
+        LEFT JOIN items ON (category.id = items.root_cat_id)
+        LEFT JOIN items_img ON (items.id = items_img.item_id AND items_img.is_main = 1)
+        WHERE category.type = 1 and category.id = #{rootCatId}
+        ORDER BY items.created_time DESC
+        LIMIT 0,6
     </select>
 
 </mapper>
