@@ -4,6 +4,8 @@ import com.ysdrzp.pojo.Items;
 import com.ysdrzp.pojo.ItemsImg;
 import com.ysdrzp.pojo.ItemsParam;
 import com.ysdrzp.pojo.ItemsSpec;
+import com.ysdrzp.vo.CommentsCountVO;
+
 import java.util.List;
 
 public interface ItemsService {
@@ -35,5 +37,12 @@ public interface ItemsService {
      * @return
      */
     ItemsParam queryItemsParamByItemId(String itemId);
+
+    /**
+     * 统计商品评价等级
+     * @param itemId
+     * @return
+     */
+    CommentsCountVO queryCommentCount(String itemId);
 
 }

@@ -3,16 +3,14 @@ package com.ysdrzp.controller;
 import com.ysdrzp.pojo.*;
 import com.ysdrzp.service.*;
 import com.ysdrzp.utils.YSDRZPJSONResult;
+import com.ysdrzp.vo.CommentsCountVO;
 import com.ysdrzp.vo.ItemsVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,6 +45,18 @@ public class ItemsController {
         itemsVO.setItemSpecList(itemsSpecs);
 
         return YSDRZPJSONResult.ok(itemsVO);
+    }
+
+    @ApiOperation(value = "获取商品评价等级", notes = "created by @ysdrzp", httpMethod = "GET")
+    @GetMapping("/commentLevel")
+    public YSDRZPJSONResult commentLevel(@ApiParam(value = "商品Id", name = "itemId", required = true) @RequestParam String itemId){
+
+        if (StringUtils.isBlank(itemId)){
+            return YSDRZPJSONResult.errorMsg(null);
+        }
+
+        CommentsCountVO commentsCountVO = itemsService.queryCommentCount(itemId);
+        return YSDRZPJSONResult.ok(commentsCountVO);
     }
 
 }

@@ -1,16 +1,14 @@
 package com.ysdrzp.service.impl;
 
-import com.ysdrzp.mapper.ItemsImgMapper;
-import com.ysdrzp.mapper.ItemsMapper;
-import com.ysdrzp.mapper.ItemsParamMapper;
-import com.ysdrzp.mapper.ItemsSpecMapper;
-import com.ysdrzp.pojo.Items;
-import com.ysdrzp.pojo.ItemsImg;
-import com.ysdrzp.pojo.ItemsParam;
-import com.ysdrzp.pojo.ItemsSpec;
+import com.ysdrzp.enums.CommentLevel;
+import com.ysdrzp.mapper.*;
+import com.ysdrzp.pojo.*;
 import com.ysdrzp.service.ItemsService;
+import com.ysdrzp.vo.CommentsCountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -29,6 +27,9 @@ public class ItemsServiceImpl implements ItemsService {
 
     @Autowired
     ItemsParamMapper itemsParamMapper;
+
+    @Autowired
+    ItemsCommentsMapper itemsCommentsMapper;
 
     @Override
     public Items queryItemById(String id) {
@@ -61,4 +62,39 @@ public class ItemsServiceImpl implements ItemsService {
 
         return itemsParamMapper.selectOneByExample(itemsParamExample);
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public CommentsCountVO queryCommentCount(String itemId) {
+
+        Integer goodCounts = getItemCommentsCount(itemId, CommentLevel.Good.type);
+        Integer normalCounts = getItemCommentsCount(itemId, CommentLevel.Normal.type);
+        Integer badCounts = getItemCommentsCount(itemId, CommentLevel.Bad.type);
+        Integer totalCounts = goodCounts + normalCounts + badCounts;
+
+        CommentsCountVO commentsCountVO = new CommentsCountVO();
+        commentsCountVO.setTotalCounts(totalCounts);
+        commentsCountVO.setGoodCounts(goodCounts);
+        commentsCountVO.setNormalCounts(normalCounts);
+        commentsCountVO.setBadCounts(badCounts);
+
+        return commentsCountVO;
+    }
+
+    /**
+     * 获取商品指定评价等级的评论数
+     * @param itemId
+     * @param commentsLevel
+     * @return
+     */
+    private Integer getItemCommentsCount(String itemId, Integer commentsLevel){
+
+        ItemsComments itemsComments = new ItemsComments();
+        itemsComments.setItemId(itemId);
+        itemsComments.setCommentLevel(commentsLevel);
+        Integer commentsCount = itemsCommentsMapper.selectCount(itemsComments);
+
+        return commentsCount;
+    }
+
 }
