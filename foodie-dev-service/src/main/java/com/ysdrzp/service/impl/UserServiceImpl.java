@@ -51,7 +51,7 @@ public class UserServiceImpl implements IUserService {
         users.setPassword(MD5Utils.getMD5Str(userBo.getPassword()));
         users.setBirthday(DateUtil.convertToDate("1900-01-01"));
         users.setNickname(userBo.getUsername());
-        users.setSex(Sex.sexSerect.getType());
+        users.setSex(Sex.sexSerect.type);
         users.setFace(USER_FACE);
         users.setCreatedTime(DateUtil.getCurrentTimestamp());
         users.setUpdatedTime(DateUtil.getCurrentTimestamp());
