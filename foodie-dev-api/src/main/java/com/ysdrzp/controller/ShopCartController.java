@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Api(value = "购物车", tags = {"购物车接口 API"})
+@Api(value = "购物车", tags = {"购物车 API"})
 @RestController
 public class ShopCartController {
 
-    @ApiOperation(value = "商品添加到购物车", tags = {"将商品添加到购物车"}, httpMethod = "POST")
+    @ApiOperation(value = "商品添加到购物车", notes = "created by @ysdrzp", httpMethod = "POST")
     @PostMapping("/add")
     public YSDRZPJSONResult add(@RequestParam String userId, @RequestBody ShopCartBO shopCartBO,
                                 HttpServletRequest request, HttpServletResponse response){
@@ -30,7 +30,7 @@ public class ShopCartController {
         return YSDRZPJSONResult.ok();
     }
 
-    @ApiOperation(value = "商品从购物车移除", tags = {"将商品从购物车移除"}, httpMethod = "GET")
+    @ApiOperation(value = "商品从购物车移除", notes = "created by @ysdrzp", httpMethod = "GET")
     @GetMapping("/delete")
     public YSDRZPJSONResult delete(@RequestParam String userId, @ApiParam(value = "商品规格 ids", name = "itemSpecId", required = true) @RequestParam String itemSpecId, HttpServletRequest request, HttpServletResponse response){
 
