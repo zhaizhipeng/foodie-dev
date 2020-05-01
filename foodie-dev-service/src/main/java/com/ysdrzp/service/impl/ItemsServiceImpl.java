@@ -3,6 +3,7 @@ package com.ysdrzp.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ysdrzp.enums.CommentLevel;
+import com.ysdrzp.enums.YesOrNo;
 import com.ysdrzp.mapper.*;
 import com.ysdrzp.pojo.*;
 import com.ysdrzp.service.ItemsService;
@@ -143,6 +144,34 @@ public class ItemsServiceImpl implements ItemsService {
         Collections.addAll(specIdsList, specIds);
 
         return itemsMapperCustom.queryItemsBySpecIds(specIdsList);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public ItemsSpec queryItemSpecById(String itemSpecId) {
+
+        return itemsSpecMapper.selectByPrimaryKey(itemSpecId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public String queryItemMainImgById(String itemId) {
+
+        ItemsImg itemsImg = new ItemsImg();
+        itemsImg.setItemId(itemId);
+        itemsImg.setIsMain(YesOrNo.yes.type);
+        ItemsImg result = itemsImgMapper.selectOne(itemsImg);
+        return result != null ? result.getUrl() : "";
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void decreaseItemSpecStock(String specId, int buyCounts) {
+
+        int result = itemsMapperCustom.decreaseItemSpecStock(specId, buyCounts);
+        if (result != 1) {
+            throw new RuntimeException("订单创建失败，原因：库存不足!");
+        }
     }
 
     /**

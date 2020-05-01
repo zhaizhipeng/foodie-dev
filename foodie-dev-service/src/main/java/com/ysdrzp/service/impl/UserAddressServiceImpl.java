@@ -9,6 +9,8 @@ import com.ysdrzp.service.IUserAddressService;
 import com.ysdrzp.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -97,6 +99,15 @@ public class UserAddressServiceImpl implements IUserAddressService {
         userAddress.setUserId(userId);
         userAddress.setIsDefault(IsDefault.Yes.type);
         userAddressMapper.updateByPrimaryKeySelective(userAddress);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public UserAddress queryUserAddres(String userId, String addressId) {
+        UserAddress userAddress = new UserAddress();
+        userAddress.setUserId(userId);
+        userAddress.setId(addressId);
+        return userAddressMapper.selectOne(userAddress);
     }
 
 }
