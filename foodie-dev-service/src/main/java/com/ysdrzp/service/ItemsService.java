@@ -6,6 +6,8 @@ import com.ysdrzp.pojo.ItemsParam;
 import com.ysdrzp.pojo.ItemsSpec;
 import com.ysdrzp.utils.PagedGridResult;
 import com.ysdrzp.vo.CommentsCountVO;
+import com.ysdrzp.vo.ShopCartVO;
+
 import java.util.List;
 
 public interface ItemsService {
@@ -74,5 +76,12 @@ public interface ItemsService {
      * @return
      */
     PagedGridResult pagedQueryItemByThirdCat(String catId, String sort, Integer page, Integer pageSize);
+
+    /**
+     * 获取规格下最新商品信息
+     * @param itemSpecIds
+     * @return
+     */
+    List<ShopCartVO> queryItemsBySpecIds(String itemSpecIds);
 
 }

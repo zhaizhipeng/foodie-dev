@@ -1,12 +1,16 @@
 package com.ysdrzp.controller;
 
-import com.ysdrzp.pojo.*;
-import com.ysdrzp.service.*;
+import com.ysdrzp.pojo.Items;
+import com.ysdrzp.pojo.ItemsImg;
+import com.ysdrzp.pojo.ItemsParam;
+import com.ysdrzp.pojo.ItemsSpec;
+import com.ysdrzp.service.ItemsService;
 import com.ysdrzp.utils.JsonUtils;
 import com.ysdrzp.utils.PagedGridResult;
 import com.ysdrzp.utils.YSDRZPJSONResult;
 import com.ysdrzp.vo.CommentsCountVO;
 import com.ysdrzp.vo.ItemsVO;
+import com.ysdrzp.vo.ShopCartVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -130,4 +134,17 @@ public class ItemsController {
         PagedGridResult pagedGridResult = itemsService.pagedQueryItemByThirdCat(catId, sort, page, pageSize);
         return YSDRZPJSONResult.ok(pagedGridResult);
     }
+
+    @ApiOperation(value = "根据规格 ids 查询购物车中商品的最新数据", notes = "created by @ysdrzp", httpMethod = "GET")
+    @GetMapping("/refresh")
+    public YSDRZPJSONResult refresh(@ApiParam(value = "商品规格 ids", name = "itemSpecIds", required = true) @RequestParam String itemSpecIds){
+
+        if (StringUtils.isBlank(itemSpecIds)){
+            return YSDRZPJSONResult.errorMsg(null);
+        }
+
+        List<ShopCartVO> list = itemsService.queryItemsBySpecIds(itemSpecIds);
+        return YSDRZPJSONResult.ok(list);
+    }
+
 }

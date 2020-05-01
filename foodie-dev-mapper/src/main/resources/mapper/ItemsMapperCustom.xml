@@ -82,4 +82,22 @@
         </if>
     </select>
 
+    <select id="queryItemsBySpecIds" parameterType="list" resultType="com.ysdrzp.vo.ShopCartVO">
+        SELECT
+            items.id AS itemId,
+            items.item_name AS itemName,
+            items_img.url AS itemImgUrl,
+            items_spec.id AS specId,
+            items_spec.`name` AS specName,
+            items_spec.price_discount AS priceDiscount,
+            items_spec.price_normal AS priceNormal
+        FROM
+            items_spec
+        LEFT JOIN items ON (items.id = items_spec.item_id)
+        LEFT JOIN items_img ON (items.id = items_img.item_id AND items_img.is_main = 1)
+        where items_spec.id in
+        <foreach collection="specIdsList" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

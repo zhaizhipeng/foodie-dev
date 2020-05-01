@@ -11,15 +11,14 @@ import com.ysdrzp.utils.PagedGridResult;
 import com.ysdrzp.vo.CommentsCountVO;
 import com.ysdrzp.vo.ItemCommentVO;
 import com.ysdrzp.vo.ItemSearchVO;
+import com.ysdrzp.vo.ShopCartVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ItemsServiceImpl implements ItemsService {
@@ -47,6 +46,7 @@ public class ItemsServiceImpl implements ItemsService {
         return itemsMapper.selectByPrimaryKey(id);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<ItemsImg> queryItemsImgByItemId(String itemId) {
         Example itemsImgExample = new Example(ItemsImg.class);
@@ -56,6 +56,7 @@ public class ItemsServiceImpl implements ItemsService {
         return itemsImgMapper.selectByExample(itemsImgExample);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<ItemsSpec> queryItemsSpecByItemId(String itemId) {
         Example itemsSpecExample = new Example(ItemsSpec.class);
@@ -65,6 +66,7 @@ public class ItemsServiceImpl implements ItemsService {
         return itemsSpecMapper.selectByExample(itemsSpecExample);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public ItemsParam queryItemsParamByItemId(String itemId) {
         Example itemsParamExample = new Example(ItemsParam.class);
@@ -92,6 +94,7 @@ public class ItemsServiceImpl implements ItemsService {
         return commentsCountVO;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public PagedGridResult queryItemComment(String itemId, Integer level, Integer page, Integer pageSize) {
 
@@ -108,6 +111,7 @@ public class ItemsServiceImpl implements ItemsService {
         return setterPagedGridResult(list, page);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public PagedGridResult pagedQueryItemByKeyWord(String keywords, String sort, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
@@ -119,6 +123,7 @@ public class ItemsServiceImpl implements ItemsService {
         return setterPagedGridResult(list, page);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public PagedGridResult pagedQueryItemByThirdCat(String catId, String sort, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
@@ -128,6 +133,16 @@ public class ItemsServiceImpl implements ItemsService {
         paramMap.put("sort", sort);
         List<ItemSearchVO> list = itemsMapperCustom.searchItemByThirdCat(paramMap);
         return setterPagedGridResult(list, page);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<ShopCartVO> queryItemsBySpecIds(String itemSpecIds) {
+        String[] specIds = itemSpecIds.split(",");
+        List<String> specIdsList = new ArrayList<>();
+        Collections.addAll(specIdsList, specIds);
+
+        return itemsMapperCustom.queryItemsBySpecIds(specIdsList);
     }
 
     /**

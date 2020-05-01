@@ -2,6 +2,7 @@ package com.ysdrzp.mapper;
 
 import com.ysdrzp.vo.ItemCommentVO;
 import com.ysdrzp.vo.ItemSearchVO;
+import com.ysdrzp.vo.ShopCartVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -32,5 +33,12 @@ public interface ItemsMapperCustom{
      * @return
      */
     List<ItemSearchVO> searchItemByThirdCat(@Param("paramMap") Map<String, Object> paramMap);
+
+    /**
+     * 获取规格最新商品信息
+     * @param specIdsList
+     * @return
+     */
+    List<ShopCartVO> queryItemsBySpecIds(@Param("specIdsList") List<String> specIdsList);
 
 }
