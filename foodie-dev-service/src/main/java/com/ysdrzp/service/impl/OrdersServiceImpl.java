@@ -11,6 +11,9 @@ import com.ysdrzp.service.IOrdersService;
 import com.ysdrzp.service.IUserAddressService;
 import com.ysdrzp.service.ItemsService;
 import com.ysdrzp.utils.DateUtil;
+import com.ysdrzp.vo.MerchantOrdersVO;
+import com.ysdrzp.vo.OrderVO;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -38,7 +41,7 @@ public class OrdersServiceImpl implements IOrdersService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public String createOrder(SubmitOrderBO submitOrderBO) {
+    public OrderVO createOrder(SubmitOrderBO submitOrderBO) {
 
         String userId = submitOrderBO.getUserId();
         String addressId = submitOrderBO.getAddressId();
@@ -117,7 +120,36 @@ public class OrdersServiceImpl implements IOrdersService {
         waitPayOrderStatus.setCreatedTime(new Date());
         orderStatusMapper.insert(waitPayOrderStatus);
 
-        return orderId;
+        // 4. 构建商户订单，用于传给支付中心
+        MerchantOrdersVO merchantOrdersVO = new MerchantOrdersVO();
+        merchantOrdersVO.setMerchantOrderId(orderId);
+        merchantOrdersVO.setMerchantUserId(userId);
+        merchantOrdersVO.setAmount(realPayAmount + postAmount);
+        merchantOrdersVO.setPayMethod(payMethod);
+
+        // 5. 构建自定义订单vo
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderId(orderId);
+        orderVO.setMerchantOrdersVO(merchantOrdersVO);
+
+        orderVO.setOrderId(orderId);
+        return orderVO;
+    }
+
+    @Override
+    public void updateOrderStatus(String merchantOrderId, Integer status) {
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderId(merchantOrderId);
+        orderStatus.setOrderStatus(status);
+        orderStatusMapper.updateByPrimaryKey(orderStatus);
+    }
+
+    @Override
+    public OrderStatus queryOrderStatusInfo(String orderId) {
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderId(orderId);
+        orderStatus = orderStatusMapper.selectByPrimaryKey(orderStatus);
+        return orderStatus;
     }
 
 }
