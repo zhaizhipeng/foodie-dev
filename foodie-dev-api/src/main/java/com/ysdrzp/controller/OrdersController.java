@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -44,11 +46,10 @@ public class OrdersController {
     @Autowired
     RestTemplate restTemplate;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @ApiOperation(value = "创建订单", notes = "created by @ysdrzp", httpMethod = "POST")
     @PostMapping("/create")
     public YSDRZPJSONResult create(@RequestBody SubmitOrderBO submitOrderBO, HttpServletRequest request, HttpServletResponse response){
-
-        System.out.println(JsonUtils.objectToJson(submitOrderBO));
 
         if (submitOrderBO.getPayMethod() != PayMethod.WEIXIN.type && submitOrderBO.getPayMethod() != PayMethod.ALIPAY.type ) {
             return YSDRZPJSONResult.errorMsg("支付方式不支持!");
@@ -91,6 +92,7 @@ public class OrdersController {
      * @param merchantOrderId
      * @return
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     @PostMapping("notifyMerchantOrderPaid")
     public Integer notifyMerchantOrderPaid(String merchantOrderId) {
         ordersService.updateOrderStatus(merchantOrderId, OrderStatusEnum.WAIT_DELIVER.type);
@@ -102,6 +104,7 @@ public class OrdersController {
      * @param orderId
      * @return
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     @PostMapping("getPaidOrderInfo")
     public YSDRZPJSONResult getPaidOrderInfo(String orderId) {
 
