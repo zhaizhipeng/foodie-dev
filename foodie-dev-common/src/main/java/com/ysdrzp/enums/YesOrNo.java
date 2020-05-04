@@ -3,7 +3,7 @@ package com.ysdrzp.enums;
 public enum YesOrNo {
 
     yes(1, "是"),
-    no(2, "否");
+    no(0, "否");
 
     public final Integer type;
 

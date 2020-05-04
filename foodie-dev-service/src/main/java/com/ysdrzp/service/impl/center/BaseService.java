@@ -16,5 +16,4 @@ public class BaseService {
         grid.setRecords(pageList.getTotal());
         return grid;
     }
-
 }
