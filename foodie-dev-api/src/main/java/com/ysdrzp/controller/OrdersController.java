@@ -33,7 +33,7 @@ public class OrdersController {
     /**
      * 支付中心通知后台更新订单状态地址
      */
-    private static final String PAY_RETURN_URL = "http://localhost:8088/orders/notifyMerchantOrderPaid";
+    private static final String PAY_RETURN_URL = "http://106.14.190.145:8088/foodie-dev-api/orders/notifyMerchantOrderPaid";
 
     /**
      * 支付中心下单地址
