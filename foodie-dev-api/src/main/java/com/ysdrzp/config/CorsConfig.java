@@ -26,6 +26,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         List<String> allowedOrigins = new ArrayList<>();
         allowedOrigins.add("http://localhost:63342");
+        allowedOrigins.add("http://106.14.190.145:8080");
         config.setAllowedOrigins(allowedOrigins);
         // 设置是否发送 cookie 信息
         config.setAllowCredentials(true);
