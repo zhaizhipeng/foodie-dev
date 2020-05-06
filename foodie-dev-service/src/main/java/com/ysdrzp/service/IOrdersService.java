@@ -26,4 +26,9 @@ public interface IOrdersService {
      * @return
      */
     OrderStatus queryOrderStatusInfo(String orderId);
+
+    /**
+     * 关闭超时未支付
+     */
+    void closeOrder();
 }

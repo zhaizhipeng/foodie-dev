@@ -13,13 +13,13 @@ import com.ysdrzp.service.ItemsService;
 import com.ysdrzp.utils.DateUtil;
 import com.ysdrzp.vo.MerchantOrdersVO;
 import com.ysdrzp.vo.OrderVO;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OrdersServiceImpl implements IOrdersService {
@@ -150,6 +150,34 @@ public class OrdersServiceImpl implements IOrdersService {
         orderStatus.setOrderId(orderId);
         orderStatus = orderStatusMapper.selectByPrimaryKey(orderStatus);
         return orderStatus;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void closeOrder() {
+
+        // 查询所有超时未支付订单（1小时）
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderStatus(OrderStatusEnum.WAIT_PAY.type);
+        List<OrderStatus> orderStatusList = orderStatusMapper.select(orderStatus);
+        for (OrderStatus status : orderStatusList){
+            // 订单创建时间
+            Date createdTime  = status.getCreatedTime();
+            // 和当前时间对比
+            int days = DateUtil.daysBetween(createdTime, new Date());
+            if (days >= 1){
+                doClose(status.getOrderId());
+            }
+        }
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    void doClose(String orderId){
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderId(orderId);
+        orderStatus.setOrderStatus(OrderStatusEnum.CLOSE.type);
+        orderStatus.setCloseTime(new Date());
+        orderStatusMapper.updateByPrimaryKeySelective(orderStatus);
     }
 
 }
